@@ -1,4 +1,4 @@
-package corg.zerock.mapper;
+package org.zerock.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
