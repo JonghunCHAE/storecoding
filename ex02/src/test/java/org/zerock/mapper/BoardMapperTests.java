@@ -19,7 +19,7 @@ public class BoardMapperTests {
 	@Setter(onMethod_ = @Autowired)
 	public BoardMapper mapper;
 	
-	//@Test
+	@Test
 	public void testGetList() {
 		mapper.getList().forEach(board -> log.info(board));
 	}
@@ -61,7 +61,7 @@ public class BoardMapperTests {
 	}
 	
 	
-	@Test
+	//@Test
 	public void testUpdate() {
 		BoardVO board = new BoardVO();
 		//실행전 존재하는 번호인지 확인할 것
