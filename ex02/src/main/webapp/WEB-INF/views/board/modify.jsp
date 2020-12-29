@@ -77,7 +77,9 @@
 				formObj.attr("action", "/board/remove");
 			}else if(operation === 'list'){
 				//move to list
-				self.location = "/board/list";
+				//self.location = "/board/list";(266페이지 수정)
+				formObj.attr("action", "/board/list").attr("method", "get");
+				formObj.empty();
 				return;
 			}
 			formObj.submit();
