@@ -24,6 +24,9 @@
 					<!-- 319페이지 추가 -->
 					<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum }"/>'>
 					<input type="hidden" name="amount" value='<c:out value="${cri.amount }"/>'>
+					<!-- 346페이지 추가 -->
+					<input type="hidden" name="type" value='<c:out value="${cri.type }"/>'>
+					<input type="hidden" name="keyword" value='<c:out value="${cri.keyword }"/>'>
 			
 					<div class="form-group">
 						<label>Bno</label><input class="form-control" name="bno"
@@ -75,16 +78,24 @@
 			
 			let operation = $(this).data("oper");
 			
-
+			console.log(operation);
+			
 			if(operation === 'remove'){
-				
 				formObj.attr("action", "/board/remove");
 			}else if(operation === 'list'){
 				//move to list
 				//self.location = "/board/list";(266페이지 수정)
 				formObj.attr("action", "/board/list").attr("method", "get");
+				let pageNumTag = $("input[name='pageNum']").clone();
+				let amountTag = $("input[name='amount']").clone();
+				let keywordTag = $("input[name='keyword']").clone();
+				let typeTag = $("input[name='type']").clone();
+				
 				formObj.empty();
-				return;
+				formObj.append(pageNumTag);
+				formObj.append(amountTag);
+				formObj.append(keywordTag);
+				formObj.append(typeTag);
 			}
 			formObj.submit();
 			

@@ -49,6 +49,8 @@
 					<input type="hidden" id='bno' name='bno' value='<c:out value="${board.bno }" />'>
 					<input type="hidden" id='pageNum' name='pageNum' value='<c:out value="${cri.pageNum }" />'>
 					<input type="hidden" id='amount' name='amount' value='<c:out value="${cri.amount }" />'>
+					<input type="hidden" id='keyword' name='keyword' value='<c:out value="${cri.keyword }" />'>
+					<input type="hidden" id='type' name='type' value='<c:out value="${cri.type }" />'>
 				</form>
 					
 			</div>	
@@ -65,10 +67,12 @@
 		let operForm = $("#operForm");
 		
 		$("button[data-oper='modify']").on("click", function(e){
+			e.preventDefault();
 			operForm.attr("action", "/board/modify").submit();
 		});
 		
 		$("button[data-oper='list']").on("click", function(e){
+			e.preventDefault();
 			operForm.find("#bno").remove();
 			operForm.attr("action", "/board/list").submit();
 		});
