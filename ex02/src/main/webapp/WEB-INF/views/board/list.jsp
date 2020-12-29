@@ -38,7 +38,8 @@
                         <c:forEach items="${list }" var="board">
                         	<tr>
                         		<td><c:out value="${board.bno }" /></td>
-                        		<td><c:out value="${board.title }" /></td>
+                        		<td><a href='/board/get?bno=<c:out value="${board.bno }" />'>
+                        		<c:out value="${board.title }" /></a></td>
                         		<td><c:out value="${board.writer }" /></td>
                         		<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate }" /></td>
                         		<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate }" /></td>
@@ -73,7 +74,7 @@
     <!-- /.modal-dialog -->
 </div>            
 
-            
+
 <!-- 246페이지 소스코드 -->
 <script type="text/javascript">
 	$(document).ready( () => {
@@ -81,10 +82,12 @@
 		
 		// 248페이지 소스코드 - 모달 실행
 		checkModal(result);
+		//257페이지 소스코드 - 뒤로가기 문제 해결
+		history.replaceState({}, null, null);
 		
 		function checkModal(result){
 			
-			if(result === ''){
+			if(result === '' || history.state){
 				return;
 			}
 			

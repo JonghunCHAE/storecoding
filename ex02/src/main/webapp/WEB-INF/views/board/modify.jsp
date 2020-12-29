@@ -20,7 +20,7 @@
 			<!-- /.panel-heading -->
 			<div class="panel-body">
 				
-				
+			<form role="form" action="/board/modify" method="post">	
 					<div class="form-group">
 						<label>Bno</label><input class="form-control" name="bno"
 						value='<c:out value="${board.bno }"/>' readonly="readonly"/>
@@ -28,23 +28,28 @@
 					
 					<div class="form-group">
 						<label>Title</label><input class="form-control" name="title"
-						value='<c:out value="${board.title }"/>' readonly="readonly"/>
+						value='<c:out value="${board.title }"/>' />
 					</div>
 					
 					<div class="form-group">
 						<label>Text area</label>
-						<textarea class="form-control" rows="3" name="content" readonly="readonly"><c:out value="${board.content }" /></textarea>
+						<textarea class="form-control" rows="3" name="content" ><c:out value="${board.content }" /></textarea>
 					</div>
 					
 					<div class="form-group">
 						<label>Writer</label> <input class="form-control" name="writer"
 						value='<c:out value="${board.writer }"/>' >
 					</div>
-					<button data-oper="modify" class="btn btn-default">
-					<a href="/board/modify?bno=<c:out value="${board.bno }"/>">Modify</a></button>
-					<button data-oper="list" class="btn btn-info">
-					<a href="/board/list">List</a></button>
 					
+					
+					
+					<button data-oper="modify" class="btn btn-default" type="submit">
+					Modify</button>
+					<button data-oper="remove" class="btn btn-danger" type="submit">
+					Remove</buton>
+					<button data-oper="list" class="btn btn-info" type="submit">
+					List</button>
+				</form>
 			</div>	
 			<!-- end panel-body -->
 		</div>
@@ -53,4 +58,35 @@
 	<!-- end panel -->
 </div>
 <!-- /.row -->
+
+<script type="text/javascript">
+	 
+	$(document).ready(() => {
+		
+		let formObj = $("form");
+		// 화살표 문법 사용시 data-oper 데이터 자체를 못 받아옴	
+		$('button').on("click", function(e) {//e => { 
+			
+			e.preventDefault();
+			
+			let operation = $(this).data("oper");
+			
+
+			if(operation === 'remove'){
+				
+				formObj.attr("action", "/board/remove");
+			}else if(operation === 'list'){
+				//move to list
+				self.location = "/board/list";
+				return;
+			}
+			formObj.submit();
+			
+		});
+		
+	});
+
+</script>
+
+
 <%@include file="../includes/footer.jsp" %>
