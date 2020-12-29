@@ -21,6 +21,10 @@
 			<div class="panel-body">
 				
 			<form role="form" action="/board/modify" method="post">	
+					<!-- 319페이지 추가 -->
+					<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum }"/>'>
+					<input type="hidden" name="amount" value='<c:out value="${cri.amount }"/>'>
+			
 					<div class="form-group">
 						<label>Bno</label><input class="form-control" name="bno"
 						value='<c:out value="${board.bno }"/>' readonly="readonly"/>
@@ -48,7 +52,7 @@
 					<button data-oper="remove" class="btn btn-danger" type="submit">
 					Remove</buton>
 					<button data-oper="list" class="btn btn-info" type="submit">
-					List</button>
+					 List </button>
 				</form>
 			</div>	
 			<!-- end panel-body -->
