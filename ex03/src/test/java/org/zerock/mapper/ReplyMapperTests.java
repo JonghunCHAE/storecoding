@@ -2,6 +2,7 @@ package org.zerock.mapper;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.zerock.domain.Criteria;
 import org.zerock.domain.ReplyVO;
 
 import lombok.Setter;
@@ -63,7 +65,7 @@ public class ReplyMapperTests {
 		mapper.delete(targetRno);
 	}
 	
-	@Test
+	//@Test
 	public void testUpdate() {
 		
 		Long targetRno = 10L;
@@ -76,6 +78,17 @@ public class ReplyMapperTests {
 		
 		log.info("UPDATE COUNT: " + count);
 	}
+	
+	@Test
+	public void testList() {
+		
+		Criteria cri = new Criteria();
+		//264L
+		List<ReplyVO> replies = mapper.getListWithPaging(cri, bnoArr[0]);
+		
+		replies.forEach(reply -> log.info(reply));
+	}
+	
 	
 	
 }
