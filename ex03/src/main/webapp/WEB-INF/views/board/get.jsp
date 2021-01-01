@@ -193,6 +193,72 @@ $(document).ready(() => {
 		$(".modal").modal("show");
 	});
 	
+	modalRegisterBtn.on("click", e =>{
+		
+		let reply = {
+				reply : modalInputReply.val(),
+				replyer: modalInputReplyer.val(),
+				bno: bnoValue
+		};
+	
+	
+		replyService.add(reply, result =>{
+			
+			alert(result);
+			
+			modal.find("input").val("");
+			modal.modal("hide");
+			
+			showList(1);
+		});
+	});
+	
+	$(".chat").on("click", "li", function(e) {
+		let rno = $(this).data("rno");
+		
+		replyService.get(rno, reply => {
+			
+			modalInputReply.val(reply.reply);
+			
+			modalInputReplyer.val(reply.replyer);
+			modalInputReplyDate.val(replyService.displayTime(reply.replyDate)).attr("readonly", "readonly");
+			modal.data("rno", reply.rno);
+			
+			modal.find("button[id != 'modalCloseBtn']").hide();
+			modalModBtn.show();
+			modalRemoveBtn.show();
+			
+			$(".modal").modal("show");
+		});
+	});
+	
+	modalModBtn.on("click", e => {
+		
+		let reply = {rno:modal.data("rno"),
+					reply:modalInputReply.val()};
+		
+		replyService.update(reply, result => {
+			
+			alert(result);
+			modal.modal("hide");
+			showList(1);
+		});
+	});
+	
+	modalRemoveBtn.on("click", e => {
+		
+		let rno = modal.data("rno");
+		
+		replyService.remove(rno, result => {
+			
+			alert(result);
+			modal.modal("hide");
+			showList(1);
+		});
+	});
+	
+	
+	
 });
 </script>
 
