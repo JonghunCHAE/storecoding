@@ -94,6 +94,9 @@
 				<!-- ./ end ul -->
 			</div>
 			<!-- /.panel .chat-panel -->
+			<div class="panel-footer">
+			
+			</div>
 		</div>
 	</div>
 	<!-- ./end row -->
@@ -142,35 +145,47 @@
 <!-- 자바스크립트 파일 인식 400p -->
 <script type="text/javascript" src="/resources/js/reply.js"></script>
 <script type="text/javascript">
-console.log("=========");
-console.log("JS TEST");
-
-
-
 // 12번 댓글 수정
+
 $(document).ready(() => {
-		
+
 	let bnoValue = '<c:out value="${board.bno}" />';
 	let replyUL = $(".chat");
 	
 	showList(1);
 	
 	function showList(page){
+
+		console.log("show List " + page);
 		
-		replyService.getList({bno:bnoValue, page:page || 1}, list =>{
-			let str = "";
-			if(list == null || list.length == 0){
-				replyUL.html("");
+		replyService.getList({bno:bnoValue, page:page || 1}, 
+							function(replyData){
+			
+			console.log("replyCnt: " + replyData.replyCnt);
+			console.log("list: " + replyData.list);
+			console.log(replyData.list);
+			
+			if(page == -1){
+				pageNum = Math.ceil(replyData.replyCnt / 10.0);
+				showList(pageNum);
 				return;
 			}
-			for(let i=0, len=list.length || 0; i < len; i++){
-				str += "<li class='left clearfix' data-rno='" + list[i].rno +"'>";
-				str += "  <div><div class='header'><strong class='primary-font'>" + list[i].replyer + "</strong>";
-				str += "    <small class='pull-right text-muted'>"+replyService.displayTime(list[i].replyDate)+"</small></div>";
-				str += "      <p>"+list[i].reply+"</p></div></li>";
+			
+			
+			let str = "";
+			if(replyData.list == null || replyData.list.length == 0){
+				return;
+			}
+			for(let i=0, len=replyData.list.length || 0; i < len; i++){
+				str += "<li class='left clearfix' data-rno='" + replyData.list[i].rno +"'>";
+				str += "  <div><div class='header'><strong class='primary-font'>[" + replyData.list[i].rno + "] " + replyData.list[i].replyer + "</strong>";
+				str += "    <small class='pull-right text-muted'>"+replyService.displayTime(replyData.list[i].replyDate)+"</small></div>";
+				str += "      <p>"+replyData.list[i].reply+"</p></div></li>";
 				
 			}
 			replyUL.html(str);
+			
+			showReplyPage(replyData.replyCnt);
 		});//end function
 	}//end showList
 	
@@ -209,7 +224,8 @@ $(document).ready(() => {
 			modal.find("input").val("");
 			modal.modal("hide");
 			
-			showList(1);
+			//showList(1);
+			showList(-1);
 		});
 	});
 	
@@ -257,6 +273,62 @@ $(document).ready(() => {
 		});
 	});
 	
+	
+	let pageNum = 1;
+	let replyPageFooter = $(".panel-footer");
+	
+	function showReplyPage(replyCnt){
+		
+		let endNum = Math.ceil(pageNum / 10.0) * 10;
+		let startNum = endNum - 9;
+		
+		let prev = startNum != 1;
+		let next = false;
+		
+		if(endNum * 10 >= replyCnt){
+			endNum = Math.ceil(replyCnt/10.0);
+		}
+		
+		if(endNum * 10 < replyCnt){
+			next = true;
+		}
+		
+		let str = "<ul class='pagination pull-right'>";
+		
+		if(prev){
+			str += "<li class='page-item'><a class='page-link' href='" + (startNum -1)+"'>Previous</a></li>";
+		}
+		
+		for(let i = startNum; i <= endNum; i++){
+			let active = pageNum == i ? "active" : "";
+			
+			str += "<li class='page-item " + active + " '><a class='page-link' href='" + i + "'>" + i + "</a></li>";
+		}
+		
+		if(next){
+			str += "<li class='page-item'><a class='page-link' href='" + (endNum + 1)+ "'>Next</a></li>";
+		}
+		
+		str += "</ul></div>";
+		
+		console.log(str);
+		
+		replyPageFooter.html(str);
+	}	
+
+	replyPageFooter.on("click", "li a", function(e) {
+
+		e.preventDefault();
+		console.log("page click");
+		
+		let targetPageNum = $(this).attr("href");
+		
+		console.log("targetPageNum : " + targetPageNum);
+		
+		pageNum = targetPageNum;
+		
+		showList(pageNum);
+	});
 	
 	
 });

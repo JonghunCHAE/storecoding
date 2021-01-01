@@ -29,12 +29,14 @@ let replyService = ( () => {
 		
 		let bno = param.bno;
 		
-		var page = param.page || 1;
+		let page = param.page || 1;
 		
 		$.getJSON("/replies/pages/" + bno + "/" + page + ".json",
 				(data) => {
 					if(callback){
-						callback(data);
+						callback(data);//댓글 목록만 가져오는 경우
+						//callback(data.replyCnt, data.list);//댓글 숫자 + 목록 가져오는 경우(작동X)
+						
 					}
 				}).fail( (xhr, status, err) => {
 					if(error){
