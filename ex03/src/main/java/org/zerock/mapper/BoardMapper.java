@@ -2,6 +2,7 @@ package org.zerock.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 import org.zerock.domain.BoardVO;
@@ -25,4 +26,6 @@ public interface BoardMapper {
 	public int update(BoardVO board);
 	
 	public int getTotalCount(Criteria cri);
+	
+	public void updateReplyCnt(@Param("bno") Long bno, @Param("amount") int amount);
 }
