@@ -66,8 +66,9 @@ $(document).ready( () => {
 			contentType: false,
 			data: formData,
 			type: 'POST',
+			dataType:'json',
 			success: result => {
-				alert("Uploaded");
+				console.log(result);
 			}
 		});
 	});
