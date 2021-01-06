@@ -4,6 +4,29 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<style>
+.uploadResult {
+	width:100%;
+	background-color: gray;
+}
+
+.uploadResult ul{
+	display:flex;
+	flex-flow:row;
+	justify-contet: center;
+	align-items: center;
+}
+
+.uploadResult ul li {
+	list-style: none;
+	padding: 10px;
+}
+
+.uploadResult ul li img{
+	width: 20px;
+}
+</style>
+
 <title>Insert title here</title>
 </head>
 <body>
@@ -12,6 +35,12 @@
 	
 	<div class="uploadDiv">
 		<input type="file" name="uploadFile" multiple>
+	</div>
+	
+	<div class='uploadResult'>
+		<ul>
+		
+		</ul>
 	</div>
 
 	<button id='uploadBtn'>Upload</button>
@@ -37,8 +66,32 @@ $(document).ready( () => {
 		return true;
 	}
 	
+	let uploadResult = $(".uploadResult ul");
+	
+	function showUploadedFile(uploadResultArr){
+		
+		let str = "";
+		
+		$(uploadResultArr).each( (i, obj) => {
+			
+			if(!obj.image){
+			str += "<li><img src='/resources/img/attach.png'>"
+				+ obj.fileName + "</li>";
+			} else {
+			//str += "<li>" + obj.fileName + "</li>";
+			let fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
+			
+			str += "<li><img src='/display?fileName="+ fileCallPath +"'><li>";
+			}
+		});
+		
+		uploadResult.append(str);
+	}
 	
 	
+	
+	
+	let cloneObj = $(".uploadDiv").clone();
 	
 	$('#uploadBtn').on("click", e =>{
 		
@@ -69,6 +122,10 @@ $(document).ready( () => {
 			dataType:'json',
 			success: result => {
 				console.log(result);
+				
+				showUploadedFile(result);
+				
+				$(".uploadDiv").html(cloneObj.html());
 			}
 		});
 	});
