@@ -203,6 +203,7 @@ $(document).ready( () => {
 			type: 'POST',
 			success: result =>{
 				alert(result);
+				$(this).parents("li").hide();
 			}
 		});
 	});
