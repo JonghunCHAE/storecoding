@@ -25,6 +25,27 @@
 .uploadResult ul li img{
 	width: 20px;
 }
+.bigPictureWrapper{
+	position: absolute;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	top: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: gray;
+	z-index:100;
+	background:rgba(255, 255, 255, 0.5);
+}
+.bigPicture {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.bigPicture img{
+	width:600px;
+}
 </style>
 
 <title>Insert title here</title>
@@ -43,10 +64,37 @@
 		</ul>
 	</div>
 
+	<div class="bigPictureWrapper">
+		<div class="bigPicture">
+		
+		</div>
+	</div>
+
 	<button id='uploadBtn'>Upload</button>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script>
+
+function showImage(fileCallPath){
+	//alert(fileCallPath);
+	
+	$(".bigPictureWrapper").css("display", "flex").show();
+	
+	$(".bigPicture")
+	.html("<img src='/display?fileName=" + encodeURI(fileCallPath) + "'>")
+	.animate({width:'100%', height:'100%'}, 1000);
+}
+
+$(".bigPictureWrapper").on("click", e => {
+	$(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
+	setTimeout(() =>{
+		$(".bigPictureWrapper").hide();
+	}, 1000);
+});
+
+
+
+
 $(document).ready( () => {
 	
 	let regex = new RegExp("(.*?)\.(exe|sh|zip|alz|py)$");
@@ -66,6 +114,7 @@ $(document).ready( () => {
 		return true;
 	}
 	
+
 	let uploadResult = $(".uploadResult ul");
 	
 	function showUploadedFile(uploadResultArr){
@@ -75,21 +124,28 @@ $(document).ready( () => {
 		$(uploadResultArr).each( (i, obj) => {
 			
 			if(!obj.image){
-			str += "<li><img src='/resources/img/attach.png'>"
-				+ obj.fileName + "</li>";
+				
+				let fileCallPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_" + obj.fileName);
+				
+				str += "<li><a href='/download?fileName=" + fileCallPath + "'>" + "<img src='/resources/img/attach.png'>"
+					+ obj.fileName + "</a></li>";
 			} else {
 			//str += "<li>" + obj.fileName + "</li>";
 			let fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
 			
-			str += "<li><img src='/display?fileName="+ fileCallPath +"'><li>";
+			let originPath = obj.uploadPath + "\\" + obj.uuid + "_"+obj.fileName;
+			
+			originPath = originPath.replace(new RegExp(/\\/g), "/");
+			
+			str += "<li><a href=\"javascript:showImage(\'"+originPath+"\')\"><img src='/display?fileName="+ fileCallPath +"'></a><li>";
 			}
 		});
 		
 		uploadResult.append(str);
 	}
 	
-	
-	
+
+
 	
 	let cloneObj = $(".uploadDiv").clone();
 	
