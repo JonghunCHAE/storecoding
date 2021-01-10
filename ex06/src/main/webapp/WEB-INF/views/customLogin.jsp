@@ -24,6 +24,10 @@
 		</div>
 		
 		<div>
+			<input type="checkbox" name="remember-me">Remember Me
+		</div>
+		
+		<div>
 			<input type="submit">
 		</div>
 		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token}" />
