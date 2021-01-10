@@ -162,6 +162,9 @@ $(document).ready(e =>{
 	}
 	
 	
+	let csrfHeaderName = "${_csrf.headerName}";
+	let csrfTokenValue = "${_csrf.token}";
+	
 	$("input[type='file']").change(e =>{
 		
 		let formData = new FormData();
@@ -182,6 +185,9 @@ $(document).ready(e =>{
 			url: '/uploadAjaxAction',
 			processData : false,
 			contentType: false, 
+			beforeSend : function(xhr){
+				xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+			},
 			data: formData,
 			type: 'POST',
 			dataType: 'json',
