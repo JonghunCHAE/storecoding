@@ -183,19 +183,20 @@ $(document).ready(e =>{
 		
 		$.ajax({
 			url: '/uploadAjaxAction',
-			processData : false,
-			contentType: false, 
-			beforeSend : function(xhr){
+			async: true,
+			processData: false,
+			contentType: false,
+			beforeSend : function(xhr){   
 				xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
-			},
+            },
 			data: formData,
 			type: 'POST',
 			dataType: 'json',
-			success: result =>{
+			success: function(result){
 				console.log(result);
-				showUploadResult(result); //업로드 결과 처리 함수
+				showUploadResult(result);
 			}
-		});
+		});//end ajax
 		
 	});
 	
@@ -211,6 +212,9 @@ $(document).ready(e =>{
 		$.ajax({
 			url: '/deleteFile',
 			data: {fileName: targetFile, type:type},
+			beforeSend: xhr =>{
+				xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+			},
 			dataType: 'text',
 			type: 'POST',
 			success: result =>{
