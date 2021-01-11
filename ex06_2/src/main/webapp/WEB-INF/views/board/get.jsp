@@ -413,8 +413,26 @@ $(document).ready(() => {
 	
 	modalModBtn.on("click", e => {
 		
+		let originalReplyer = modalInputReplyer.val();
+		
 		let reply = {rno:modal.data("rno"),
-					reply:modalInputReply.val()};
+					reply:modalInputReply.val(),
+					replyer:originalReplyer};
+		
+		if(!replyer){
+			alert("로그인 후 수정이 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
+		
+		console.log("Original Replyer: " + originalReplyer);
+		
+		if(replyer != originalReplyer){
+			
+			alert("자신이 작성한 댓글만 수정이 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
 		
 		replyService.update(reply, result => {
 			
@@ -428,7 +446,26 @@ $(document).ready(() => {
 		
 		let rno = modal.data("rno");
 		
-		replyService.remove(rno, result => {
+		console.log("RNO: " + rno);
+		console.log("REPLYER: " + replyer);
+		
+		if(!replyer){
+			alert("로그인 후 삭제가 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
+		
+		let originalReplyer = modalInputReplyer.val();
+		
+		console.log("Original Replyer: " + originalReplyer);//댓글 원래 작성자
+		
+		if(replyer != originalReplyer){
+			alert("자신이 작성한 댓글만 삭제가 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
+		
+		replyService.remove(rno, originalReplyer, result => {
 			
 			alert(result);
 			modal.modal("hide");
