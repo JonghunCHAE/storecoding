@@ -344,14 +344,31 @@ $(document).ready(() => {
 	let modalRemoveBtn = $("#modalRemoveBtn");
 	let modalRegisterBtn = $("#modalRegisterBtn");
 	
+	let replyer = null;
+	
+	<sec:authorize access="isAuthenticated()">
+	
+	replyer = '<sec:authentication property="principal.username"/>';
+	
+	</sec:authorize>
+	
+	let csrfHeaderName = "${_csrf.headerName}";
+	let csrfTokenValue = "${_csrf.token}";
+	
 	$("#addReplyBtn").on("click", e => {
 		modal.find("input").val("");
+		modal.find("input[name='replyer']").val(replyer);
 		modalInputReplyDate.closest("div").hide();
 		modal.find("button[id != 'modalCloseBtn']").hide();
 		
 		modalRegisterBtn.show();
 		
 		$(".modal").modal("show");
+	});
+	
+	//Ajax spring security header...
+	$(document).ajaxSend((e, xhr, options) => {
+		xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
 	});
 	
 	modalRegisterBtn.on("click", e =>{

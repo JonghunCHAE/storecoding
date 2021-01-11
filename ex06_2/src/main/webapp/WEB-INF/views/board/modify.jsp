@@ -306,6 +306,8 @@
 			uploadUL.append(str);
 		}
 		
+		let csrfHeaderName = "${_csrf.headerName}";
+		let csrfTokenValue = "${_csrf.token}";
 		
 		$("input[type='file']").change(e =>{
 			
@@ -328,6 +330,9 @@
 				processData : false,
 				contentType: false, 
 				data: formData,
+				beforeSend: xhr =>{
+					xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+				},
 				type: 'POST',
 				dataType: 'json',
 				success: result =>{
